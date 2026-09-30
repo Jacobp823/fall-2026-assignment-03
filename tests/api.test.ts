@@ -4,13 +4,13 @@ import { app } from '../src/index.js';
 
 describe('Part 1: API Integration Tests', () => {
   //it('should pass placeholder test', () => {
-    // TODO: Student implementation - Part 1: Integration Testing
-    // Test user creation (POST /users)
-    // Test ticket creation (POST /tickets)
-    // Test auth middleware rejection (401 when X-User-Id is missing or invalid)
-    // Test 404 responses for non-existent users and tickets
-    // Test pagination and filtering on GET /tickets
-    //expect(true).toBe(true);
+  // TODO: Student implementation - Part 1: Integration Testing
+  // Test user creation (POST /users)
+  // Test ticket creation (POST /tickets)
+  // Test auth middleware rejection (401 when X-User-Id is missing or invalid)
+  // Test 404 responses for non-existent users and tickets
+  // Test pagination and filtering on GET /tickets
+  //expect(true).toBe(true);
   //});
 
   it('should create a new user', async () => {
@@ -44,14 +44,12 @@ describe('Part 1: API Integration Tests', () => {
   });
 
   it('should return 404 for non-existent user', async () => {
-    const response = await request(app)
-      .get('/users/9999'); // Assuming 9999 is a non-existent user ID
+    const response = await request(app).get('/users/9999');
     expect(response.status).toBe(404);
   });
 
   it('should return 404 for non-existent ticket', async () => {
-    const response = await request(app)
-      .get('/tickets/9999'); // Assuming 9999 is a non-existent ticket ID
+    const response = await request(app).get('/tickets/9999');
     expect(response.status).toBe(404);
   });
 
@@ -63,25 +61,22 @@ describe('Part 1: API Integration Tests', () => {
 
     for (let i = 0; i < 6; i++) {
       const ticketResponse = await request(app)
-      .post('/tickets')
-      .set('X-User-Id', userId)
-      .send({ title: `Ticket ${i}`, description: `Description ${i}` });
+        .post('/tickets')
+        .set('X-User-Id', userId)
+        .send({ title: `Ticket ${i}`, description: `Description ${i}` });
     }
 
-    const response = await request(app)
-      .get('/tickets?limit=5&offset=0');
+    const response = await request(app).get('/tickets?limit=5&offset=0');
     expect(response.status).toBe(200);
     expect(response.body.length).toBe(5);
   });
 
   it('should support filtering on GET /tickets', async () => {
-    const response = await request(app)
-      .get('/tickets?status=TODO');
+    const response = await request(app).get('/tickets?status=TODO');
     expect(response.status).toBe(200);
 
     for (const ticket of response.body) {
       expect(ticket.status).toBe('TODO');
     }
   });
-
 });
